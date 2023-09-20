@@ -1,0 +1,48 @@
+﻿<Window x:Class="GIModMan.MVVM.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GIModMan.MVVM.Views"
+        mc:Ignorable="d" Background="{x:Null}" AllowsTransparency="True"
+        WindowStyle="None"
+        Title="MainWindow" Height="450" Width="800">
+    <Border CornerRadius="10" Background="AliceBlue">
+        <Grid Background="{x:Null}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <Border Height="25" Grid.ColumnSpan="2" MouseDown="MoveWindow"
+                    Background="AliceBlue" BorderThickness="1" BorderBrush="Black"
+                    CornerRadius="10,10,0,0">
+                <Grid>
+                    <StackPanel Orientation="Horizontal" Margin="5,0,0,0" HorizontalAlignment="Left">
+                        <TextBlock Text="GenshinImpactModMan" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,5,0" HorizontalAlignment="Right">
+                        <Button Content="—" MinWidth="20" Margin="2" Style="{StaticResource SimpleButton}"/>
+                        <Button Content="X" MinWidth="20" Margin="2" Style="{StaticResource ContrastedButton}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <StackPanel Grid.Row="1">
+                <Button MinHeight="25" Content="Start Vanilla" Style="{StaticResource SimpleButton}"/>
+                <Button MinHeight="25" Content="Start Modded" Style="{StaticResource SimpleButton}"/>
+                <Separator/>
+                <RadioButton MinHeight="25" Content="Installed Mods" IsChecked="True" Style="{StaticResource MenuRadioButtonTheme}"/>
+                <RadioButton MinHeight="25" Content="Mod Browser" Style="{StaticResource MenuRadioButtonTheme}"/>
+                <RadioButton MinHeight="25" Content="Settings" Style="{StaticResource MenuRadioButtonTheme}"/>
+                <RadioButton MinHeight="25" Content="Configs" Style="{StaticResource MenuRadioButtonTheme}"/>
+            </StackPanel>
+            <local:InstalledModsPage Grid.Column="1" Grid.Row="1" Margin="5"/>
+            <local:ModBrowserPage Grid.Column="1" Grid.Row="1" Margin="5" Visibility="Hidden"/>
+            <local:SettingsPage Grid.Column="1" Grid.Row="1" Margin="5" Visibility="Hidden"/>
+            <local:ConfigsPage Grid.Column="1" Grid.Row="1" Margin="5" Visibility="Hidden"/>
+        </Grid>
+    </Border>
+</Window>

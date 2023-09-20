@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace GIModMan
+namespace GIModMan.MVVM.Views
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Логика взаимодействия для SettingsPage.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class SettingsPage : UserControl
     {
-        public MainWindow()
+        public SettingsPage()
         {
             InitializeComponent();
         }
