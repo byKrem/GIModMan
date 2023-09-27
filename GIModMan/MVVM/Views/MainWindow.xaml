@@ -4,9 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GIModMan.MVVM.Views"
+        xmlns:vm="clr-namespace:GIModMan.MVVM.ViewModels"
+        xmlns:cnv="clr-namespace:GIModMan.Converters"
         mc:Ignorable="d" Background="{x:Null}" AllowsTransparency="True"
+        d:DataContext="{d:DesignInstance vm:MainWindowViewModel}"
         WindowStyle="None"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <cnv:BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
+    </Window.Resources>
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
     <Border CornerRadius="10" Background="AliceBlue">
         <Grid Background="{x:Null}">
             <Grid.RowDefinitions>
@@ -26,7 +35,8 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,5,0" HorizontalAlignment="Right">
                         <Button Content="—" MinWidth="20" Margin="2" Style="{StaticResource SimpleButton}"/>
-                        <Button Content="X" MinWidth="20" Margin="2" Style="{StaticResource ContrastedButton}"/>
+                        <Button Content="X" MinWidth="20" Margin="2" Style="{StaticResource ContrastedButton}"
+                                Command="{Binding ShutdownCommand}"/>
                     </StackPanel>
                 </Grid>
             </Border>
@@ -34,15 +44,23 @@
                 <Button MinHeight="25" Content="Start Vanilla" Style="{StaticResource SimpleButton}"/>
                 <Button MinHeight="25" Content="Start Modded" Style="{StaticResource SimpleButton}"/>
                 <Separator/>
-                <RadioButton MinHeight="25" Content="Installed Mods" IsChecked="True" Style="{StaticResource MenuRadioButtonTheme}"/>
-                <RadioButton MinHeight="25" Content="Mod Browser" Style="{StaticResource MenuRadioButtonTheme}"/>
-                <RadioButton MinHeight="25" Content="Settings" Style="{StaticResource MenuRadioButtonTheme}"/>
-                <RadioButton MinHeight="25" Content="Configs" Style="{StaticResource MenuRadioButtonTheme}"/>
+                <RadioButton MinHeight="25" Content="Installed Mods" IsChecked="{Binding IsInstalledMods, Mode=TwoWay}"
+                             Style="{StaticResource MenuRadioButtonTheme}"/>
+                <RadioButton MinHeight="25" Content="Mod Browser" IsChecked="{Binding IsModBrowser, Mode=TwoWay}"
+                             Style="{StaticResource MenuRadioButtonTheme}"/>
+                <RadioButton MinHeight="25" Content="Settings" IsChecked="{Binding IsSettings, Mode=TwoWay}"
+                             Style="{StaticResource MenuRadioButtonTheme}"/>
+                <RadioButton MinHeight="25" Content="Configs" IsChecked="{Binding IsConfigs, Mode=TwoWay}"
+                             Style="{StaticResource MenuRadioButtonTheme}"/>
             </StackPanel>
-            <local:InstalledModsPage Grid.Column="1" Grid.Row="1" Margin="5"/>
-            <local:ModBrowserPage Grid.Column="1" Grid.Row="1" Margin="5" Visibility="Hidden"/>
-            <local:SettingsPage Grid.Column="1" Grid.Row="1" Margin="5" Visibility="Hidden"/>
-            <local:ConfigsPage Grid.Column="1" Grid.Row="1" Margin="5" Visibility="Hidden"/>
+            <local:InstalledModsPage Grid.Column="1" Grid.Row="1" Margin="5"
+                Visibility="{Binding IsInstalledMods, Converter={StaticResource VisibilityConverter}, FallbackValue=Collapsed}"/>
+            <local:ModBrowserPage Grid.Column="1" Grid.Row="1" Margin="5"
+                Visibility="{Binding IsModBrowser, Converter={StaticResource VisibilityConverter}, FallbackValue=Collapsed}"/>
+            <local:SettingsPage Grid.Column="1" Grid.Row="1" Margin="5"
+                Visibility="{Binding IsSettings, Converter={StaticResource VisibilityConverter}, FallbackValue=Collapsed}"/>
+            <local:ConfigsPage Grid.Column="1" Grid.Row="1" Margin="5"
+                Visibility="{Binding IsConfigs, Converter={StaticResource VisibilityConverter}, FallbackValue=Collapsed}"/>
         </Grid>
     </Border>
 </Window>

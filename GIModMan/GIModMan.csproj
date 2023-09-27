@@ -52,12 +52,16 @@
   <PropertyGroup>
     <SignManifests>false</SignManifests>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>GIModMan.App</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -81,6 +85,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\UnixTimeToDateTimeConverter.cs" />
     <Compile Include="Core\GameBananaAPIWork.cs" />
     <Compile Include="Core\ObservableObject.cs" />
@@ -89,6 +94,7 @@
     <Compile Include="MVVM\Models\Mod.cs" />
     <Compile Include="MVVM\Models\ModFile.cs" />
     <Compile Include="MVVM\Models\ModCategory.cs" />
+    <Compile Include="MVVM\ViewModels\MainWindowViewModel.cs" />
     <Compile Include="MVVM\Views\ConfigsPage.xaml.cs">
       <DependentUpon>ConfigsPage.xaml</DependentUpon>
     </Compile>
@@ -179,7 +185,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MVVM\ViewModels\" />
+    <None Include="Resources\TemplateImage.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ModImageTemplate.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
