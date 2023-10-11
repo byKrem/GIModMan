@@ -3,18 +3,44 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:GIModMan.MVVM.Views"
              xmlns:model="clr-namespace:GIModMan.MVVM.Models"
+             xmlns:cnvtr="clr-namespace:GIModMan.Converters"
+             xmlns:vm="clr-namespace:GIModMan.MVVM.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock>1</TextBlock>
-        <ListView x:Name="ResultView" Background="{x:Null}" DataContext="{x:Type model:Mod}" Visibility="Collapsed"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <Grid.Resources>
+            <cnvtr:BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        </Grid.Resources>
+        <Grid.DataContext>
+            <vm:InstalledModsViewModel/>
+        </Grid.DataContext>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="7*"/>
+        </Grid.RowDefinitions>
+        <!--TODO: Система фильтров-->
+        <TextBlock Text="Никакие моды не установлены..." VerticalAlignment="Center" HorizontalAlignment="Center" 
+                   FontSize="20" Foreground="{StaticResource black}" Visibility="Visible" Grid.Row="1"/>
+        <ListView Background="{x:Null}" DataContext="{x:Type model:Mod}" Grid.Row="1"
+				  ScrollViewer.CanContentScroll="False" HorizontalContentAlignment="Stretch"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" d:ItemsSource="{d:SampleData ItemCount=5}">
+            <ListView.Style>
+                <Style TargetType="ListView">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsZeroModsInstalled}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsZeroModsInstalled}" Value="False">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.Style>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Border Height="100" Padding="5" Background="#F0F0F0"
-                            CornerRadius="5" BorderThickness="1" BorderBrush="Black">
+                        CornerRadius="5" BorderThickness="1" BorderBrush="{StaticResource black}">
                         <StackPanel>
                             <DockPanel>
                                 <Image Source="/Resources/ModImageTemplate.png" MaxHeight="60"/>

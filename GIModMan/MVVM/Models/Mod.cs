@@ -1,12 +1,17 @@
 ﻿using GIModMan.Converters;
 using GIModMan.Core;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 
 namespace GIModMan.MVVM.Models
 {
+	public enum ModVisibility
+	{
+		hide = 0,
+		warn,
+		show
+	}
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     public class Mod : ObservableObject
     {
@@ -14,13 +19,14 @@ namespace GIModMan.MVVM.Models
 
         private int _id;
         private string _name;
-        private JArray _submitter;
+        private Submitter _submitter;
         private ModCategory _category;
-        private bool _isNSFW;
+        private ModCategory _superCategory;
+        private ModVisibility _initialVisibility;
         private DateTime _creationDate;
         private DateTime _modificationDate;
-        private string _description;
         private long _downloads;
+        private long _likes;
         private List<ModFile> _files = new List<ModFile>();
 
         [JsonProperty("_idRow")]
@@ -37,11 +43,8 @@ namespace GIModMan.MVVM.Models
             set => Set(ref _name, value);
         }
 
-        /// <summary>
-        /// _idRow, _sName, _sAvatarUrl
-        /// </summary>
         [JsonProperty("_aSubmitter")]
-        public JArray Submitter // TODO: Create model User?
+        public Submitter Submitter // TODO: Create model User?
         {
             get => _submitter;
             set => Set(ref _submitter, value);
@@ -55,6 +58,13 @@ namespace GIModMan.MVVM.Models
         {
             get => _category;
             set => Set(ref _category, value);
+        }
+        
+        [JsonProperty("_aSuperCategory")]
+        public ModCategory SuperCategory
+        {
+            get => _superCategory;
+            set => Set(ref _superCategory, value);
         }
         /*
          * Genshin Mod Categories:
@@ -75,13 +85,13 @@ namespace GIModMan.MVVM.Models
          */
 
         /// <summary>
-        /// Enum (show,warn,hide)
+        /// Enum (show,warn,hide) ModVisibility
         /// </summary>
         [JsonProperty("_sInitialVisibility")]
-        public bool IsNSFW
+        public ModVisibility InitialVisibility
         {
-            get => _isNSFW;
-            set => Set(ref _isNSFW, value);
+            get => _initialVisibility;
+            set => Set(ref _initialVisibility, value);
         }
 
         [JsonProperty("_tsDateAdded")]
@@ -107,7 +117,22 @@ namespace GIModMan.MVVM.Models
             set => Set(ref _files, value);
         }
 
-#endregion
+        [JsonProperty("_nLikeCount")]
+        public long LikeCount
+        {
+            get => _likes;
+            set => Set(ref _likes, value);
+
+        }
+
+        [JsonProperty("_nDownloadCount")]
+        public long Donwloads
+        {
+            get => _downloads;
+            set => Set(ref _downloads, value);
+        }
+
+        #endregion
         public Mod()
         {
 

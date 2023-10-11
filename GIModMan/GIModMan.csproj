@@ -87,13 +87,17 @@
     </Compile>
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\UnixTimeToDateTimeConverter.cs" />
-    <Compile Include="Core\GameBananaAPIWork.cs" />
+    <Compile Include="MVVM\Models\API\RecordsList.cs" />
+    <Compile Include="MVVM\Models\Submitter.cs" />
+    <Compile Include="MVVM\ViewModels\ModBrowserViewModel.cs" />
+    <Compile Include="Services\APIService.cs" />
     <Compile Include="Core\ObservableObject.cs" />
     <Compile Include="Core\RelayCommand.cs" />
     <Compile Include="Extensions\TypeExtention.cs" />
     <Compile Include="MVVM\Models\Mod.cs" />
     <Compile Include="MVVM\Models\ModFile.cs" />
     <Compile Include="MVVM\Models\ModCategory.cs" />
+    <Compile Include="MVVM\ViewModels\InstalledModsViewModel.cs" />
     <Compile Include="MVVM\ViewModels\MainWindowViewModel.cs" />
     <Compile Include="MVVM\Views\ConfigsPage.xaml.cs">
       <DependentUpon>ConfigsPage.xaml</DependentUpon>

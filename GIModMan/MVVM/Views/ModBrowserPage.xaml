@@ -4,10 +4,56 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GIModMan.MVVM.Views"
+             xmlns:model="clr-namespace:GIModMan.MVVM.Models"
+             xmlns:vmodels="clr-namespace:GIModMan.MVVM.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock>2</TextBlock>
-
+        <Grid.DataContext>
+            <vmodels:ModBrowserViewModel/>
+        </Grid.DataContext>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="7*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <!--TODO: Система фильтров-->
+        <ListBox  Background="{x:Null}" Grid.Row="1" ItemsSource="{Binding Mods}"
+                  ScrollViewer.CanContentScroll="False" HorizontalContentAlignment="Stretch"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" d:ItemsSource="{d:SampleData ItemCount=5}">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Height="100" Background="#F0F0F0" Padding="5" d:Width="770"
+                            CornerRadius="5" BorderThickness="1" BorderBrush="{StaticResource black}">
+                        <StackPanel>
+                            <DockPanel>
+                                <Image Source="{Binding ImagePath, FallbackValue=/Resources/MadImageTemplate.png}" MaxHeight="60"/>
+                                <StackPanel Margin="5">
+                                    <TextBlock Text="{Binding Name}"/>
+                                </StackPanel>
+                            </DockPanel>
+                            <DockPanel LastChildFill="False">
+                                <Button DockPanel.Dock="Left" Content="Install" Margin="5"/>
+                                <Button DockPanel.Dock="Left" Content="WebSite" Margin="5"/>
+                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Margin="5">
+                                    <Image/>
+                                    <TextBlock Text="{Binding Donwloads, StringFormat={}Downloads: {0}}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Margin="5">
+                                    <Image/>
+                                    <TextBlock Text="{Binding LikeCount, StringFormat={}Likes: {0}}"/>
+                                </StackPanel>
+                            </DockPanel>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <!--TODO: Переключение страниц-->
     </Grid>
 </UserControl>

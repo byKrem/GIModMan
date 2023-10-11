@@ -7,10 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using GIModMan.Extensions;
+using GIModMan.MVVM.Models.API;
 
-namespace GIModMan.Core
+namespace GIModMan.Services
 {
-    public class GameBananaAPIWork
+    public class APIService
     {
         private const int GAME_ID = 8552;
         /// <summary>
@@ -18,22 +19,12 @@ namespace GIModMan.Core
         /// {1} - ItemsPerPage,
         /// {2} - SortType (Enum: "default", "new", "updated")
         /// </summary>
-        private const string LIST_DATA_PATH = "/Game/8552/Subfeed?_nPage={0}&_nPerpage={1}&" +
+        private const string LIST_DATA_PATH = "https://gamebanana.com/apiv11/Game/8552/Subfeed?_nPage={0}&_nPerpage={1}&" +
             "_sSort={2}&_csvModelInclushions=Mod"; // Maybe include Tool model?
         /// <summary>
         /// {0} - ItemType, {1} - ItemID, {2} - Properties
         /// </summary>
-        private const string ITEM_DATA_PATH = "/{0}/{1}?_csvProperties={2}";
-        private const string BASE_PATH = "https://gamebanana.com/apiv11";
-
-        private static HttpClient client;
-        static GameBananaAPIWork()
-        {
-            client = new HttpClient()
-            {
-                BaseAddress = new Uri(BASE_PATH)
-            };
-        }
+        private const string ITEM_DATA_PATH = "https://gamebanana.com/apiv11/{0}/{1}?_csvProperties={2}";
 
         private string PreparePropertiesString(string[] fields)
         {
@@ -56,6 +47,7 @@ namespace GIModMan.Core
             {
                 fields = typeof(T).GetCustomAttributesNames().ToArray();
             }
+            HttpClient client = new HttpClient();
 
             string request = string.Format(ITEM_DATA_PATH, nameof(T), itemid, PreparePropertiesString(fields));
 
@@ -68,13 +60,12 @@ namespace GIModMan.Core
         {
             string request = string.Format(LIST_DATA_PATH, page, itemsPerPage, "default");
 
-            var response = client.GetStringAsync(request);
+            HttpClient client = new HttpClient();
+            var response = await client.GetStringAsync(request);
 
-            // TODO: Change to new version of API
-            List<List<object>> items = JsonConvert.DeserializeObject<List<List<object>>>(await @response);
-            // (long) x[1] - Item ID
-            IEnumerable<Task<T>> tasks = items.Select(x => GetItemAsync<T>((long)x[1], fields));
-            return (await Task.WhenAll(tasks)).ToList();
+            RecordsList<T> records = JsonConvert.DeserializeObject<RecordsList<T>>(@response);
+
+            return records.Records;
         }
     }
 }

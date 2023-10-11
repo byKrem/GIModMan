@@ -4,12 +4,12 @@ namespace Tests
 {
     public class GameBabanaAPIWorkTests
     {
-        private static GameBananaAPIWork APIWork;
+        private static APIService APIWork;
 
 
         static GameBabanaAPIWorkTests()
         {
-            APIWork = new GameBananaAPIWork();
+            APIWork = new APIService();
         }
 
         [Test]
@@ -33,7 +33,7 @@ namespace Tests
                     Name = "Other\\Misc",
                     IconUrl = new Uri("https://images.gamebanana.com/img/ico/ModCategory/6330aa91775d8.png")
                 },
-                IsNSFW = false,
+                InitialVisibility = false,
                 CreationDate = UnixTimeToDateTimeConverter.FromUnixTime(1692865436),
                 ModificationDate = UnixTimeToDateTimeConverter.FromUnixTime(1695785228),
                 Submitter = new JArray

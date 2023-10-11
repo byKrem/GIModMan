@@ -13,8 +13,11 @@ namespace GIModMan.MVVM.Models
         [JsonProperty("_sFile")]
         public string FileName { get; set; }
 
+        /// <summary>
+        /// Size in bytes
+        /// </summary>
         [JsonProperty("_nFilesize")]
-        public int Filesize { get; set; }
+        public long Filesize { get; set; } 
 
         [JsonProperty("_sDescription")]
         public string Description { get; set; }

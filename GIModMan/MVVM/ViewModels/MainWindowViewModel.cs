@@ -32,15 +32,15 @@ namespace GIModMan.MVVM.ViewModels
             set => Set(ref _isConfigs, value); 
         }
 
-        private RelayCommand _shutdownCommand;
+        private RelayCommand _shutdownCommand = new RelayCommand(execute =>
+        {
+            Application.Current.Shutdown();
+        });
         public ICommand ShutdownCommand => _shutdownCommand;
 
         public MainWindowViewModel()
         {
-            _shutdownCommand = new RelayCommand(execute =>
-            {
-                Application.Current.Shutdown();
-            });
+
         }
     }
 }
