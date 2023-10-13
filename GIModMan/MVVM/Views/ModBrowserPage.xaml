@@ -3,57 +3,66 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:GIModMan.MVVM.Views"
-             xmlns:model="clr-namespace:GIModMan.MVVM.Models"
              xmlns:vmodels="clr-namespace:GIModMan.MVVM.ViewModels"
+             xmlns:converters="clr-namespace:GIModMan.Converters"
+             xmlns:myelement="clr-namespace:GIModMan.MyUIElements"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.DataContext>
             <vmodels:ModBrowserViewModel/>
         </Grid.DataContext>
+        <Grid.Resources>
+            <converters:ModVisibilityToImageBlurConverter x:Key="ModVisibilityToImageBlurConverter"/>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="7*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <!--TODO: Система фильтров-->
-        <ListBox  Background="{x:Null}" Grid.Row="1" ItemsSource="{Binding Mods}"
+        <myelement:ContextHolder Grid.Row="1">
+            <myelement:ContextHolder.Commands>
+                <myelement:CommandBinding RoutedCommand="{x:Static ApplicationCommands.Open}"
+                                          RelayCommand="{Binding OpenModProfile}"/>
+            </myelement:ContextHolder.Commands>
+            <ListBox Background="{x:Null}" BorderThickness="0" ItemsSource="{Binding Mods}"
                   ScrollViewer.CanContentScroll="False" HorizontalContentAlignment="Stretch"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled" d:ItemsSource="{d:SampleData ItemCount=5}">
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                </Style>
-            </ListBox.ItemContainerStyle>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Border Height="100" Background="#F0F0F0" Padding="5" d:Width="770"
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border Height="140" Background="#F0F0F0" Padding="5" d:Width="770"
                             CornerRadius="5" BorderThickness="1" BorderBrush="{StaticResource black}">
-                        <StackPanel>
-                            <DockPanel>
-                                <Image Source="{Binding ImagePath, FallbackValue=/Resources/MadImageTemplate.png}" MaxHeight="60"/>
-                                <StackPanel Margin="5">
-                                    <TextBlock Text="{Binding Name}"/>
-                                </StackPanel>
-                            </DockPanel>
-                            <DockPanel LastChildFill="False">
-                                <Button DockPanel.Dock="Left" Content="Install" Margin="5"/>
-                                <Button DockPanel.Dock="Left" Content="WebSite" Margin="5"/>
-                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Margin="5">
-                                    <Image/>
-                                    <TextBlock Text="{Binding Donwloads, StringFormat={}Downloads: {0}}"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Margin="5">
-                                    <Image/>
-                                    <TextBlock Text="{Binding LikeCount, StringFormat={}Likes: {0}}"/>
-                                </StackPanel>
-                            </DockPanel>
-                        </StackPanel>
-                    </Border>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+                            <StackPanel>
+                                <DockPanel>
+                                    <Image Source="{Binding PreviewImagePath}" MaxHeight="100">
+                                        <Image.Effect>
+                                            <BlurEffect Radius="{Binding InitialVisibility, Converter={StaticResource ModVisibilityToImageBlurConverter}}"/>
+                                        </Image.Effect>
+                                    </Image>
+                                    <StackPanel Margin="5">
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </StackPanel>
+                                </DockPanel>
+                                <DockPanel LastChildFill="False">
+                                    <Button DockPanel.Dock="Left" Content="Install" Margin="5"/>
+                                    <Button DockPanel.Dock="Left" Content="WebSite" Margin="5"
+                                        Command="{x:Static ApplicationCommands.Open}" CommandParameter="{Binding}"/>
+                                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Margin="5">
+                                        <Image/>
+                                        <TextBlock Text="{Binding Donwloads, StringFormat={}Downloads: {0}}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Margin="5">
+                                        <Image/>
+                                        <TextBlock Text="{Binding LikeCount, StringFormat={}Likes: {0}}"/>
+                                    </StackPanel>
+                                </DockPanel>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </myelement:ContextHolder>
         <!--TODO: Переключение страниц-->
     </Grid>
 </UserControl>

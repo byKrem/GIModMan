@@ -86,10 +86,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\ModVisibilityToImageBlurConverter.cs" />
     <Compile Include="Converters\UnixTimeToDateTimeConverter.cs" />
+    <Compile Include="Enums\ModVisibility.cs" />
     <Compile Include="MVVM\Models\API\RecordsList.cs" />
+    <Compile Include="MVVM\Models\ModImage.cs" />
+    <Compile Include="MVVM\Models\PreviewMedia.cs" />
     <Compile Include="MVVM\Models\Submitter.cs" />
     <Compile Include="MVVM\ViewModels\ModBrowserViewModel.cs" />
+    <Compile Include="MyUIElements\ContextHolder.cs" />
     <Compile Include="Services\APIService.cs" />
     <Compile Include="Core\ObservableObject.cs" />
     <Compile Include="Core\RelayCommand.cs" />

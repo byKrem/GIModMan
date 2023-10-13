@@ -3,6 +3,7 @@ using GIModMan.MVVM.Models;
 using GIModMan.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace GIModMan.MVVM.ViewModels
 {
@@ -15,6 +16,15 @@ namespace GIModMan.MVVM.ViewModels
             set => Set(ref _mods, value);
         }
 
+        private RelayCommand _openModProfile = new RelayCommand(execute =>
+        {
+            if (execute is Mod mod)
+            {
+                System.Diagnostics.Process.Start(mod.ProfileUrl.ToString());
+            }
+        }, canExecute => canExecute is Mod);
+        public ICommand OpenModProfile => _openModProfile;
+
         public ModBrowserViewModel() 
         {
             _ = LoadMods();
@@ -23,7 +33,7 @@ namespace GIModMan.MVVM.ViewModels
         private async Task LoadMods()
         {
             APIService aPIService = new APIService();
-            Mods = await aPIService.GetListAsync<Mod>(1, 1);
+            Mods = await aPIService.GetListAsync<Mod>(page: 1);
         }
     }
 }

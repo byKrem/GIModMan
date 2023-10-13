@@ -1,17 +1,13 @@
 ﻿using GIModMan.Converters;
 using GIModMan.Core;
+using GIModMan.Enums;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Windows.Media.Imaging;
 
 namespace GIModMan.MVVM.Models
 {
-	public enum ModVisibility
-	{
-		hide = 0,
-		warn,
-		show
-	}
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     public class Mod : ObservableObject
     {
@@ -28,6 +24,15 @@ namespace GIModMan.MVVM.Models
         private long _downloads;
         private long _likes;
         private List<ModFile> _files = new List<ModFile>();
+        private Uri _profileUrl;
+        private PreviewMedia _previewMedia;
+
+        [JsonProperty("_sProfileUrl")]
+        public Uri ProfileUrl
+        {
+            get => _profileUrl;
+            set => Set(ref _profileUrl, value);
+        }
 
         [JsonProperty("_idRow")]
         public int Id
@@ -117,6 +122,15 @@ namespace GIModMan.MVVM.Models
             set => Set(ref _files, value);
         }
 
+        [JsonProperty("_aPreviewMedia")]
+        public PreviewMedia PreviewMedia
+        {
+            get => _previewMedia;
+            set => Set(ref _previewMedia, value);
+        }
+
+        public BitmapImage PreviewImagePath => new BitmapImage(_previewMedia.FirstImagePath);
+
         [JsonProperty("_nLikeCount")]
         public long LikeCount
         {
@@ -135,7 +149,7 @@ namespace GIModMan.MVVM.Models
         #endregion
         public Mod()
         {
-
+            
         }
 		
 		public Mod(int itemid)
