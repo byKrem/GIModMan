@@ -89,6 +89,7 @@
     <Compile Include="Converters\ModVisibilityToImageBlurConverter.cs" />
     <Compile Include="Converters\UnixTimeToDateTimeConverter.cs" />
     <Compile Include="Enums\ModVisibility.cs" />
+    <Compile Include="MVVM\Models\API\RecordMetadata.cs" />
     <Compile Include="MVVM\Models\API\RecordsList.cs" />
     <Compile Include="MVVM\Models\ModImage.cs" />
     <Compile Include="MVVM\Models\PreviewMedia.cs" />
@@ -198,6 +199,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\ModImageTemplate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\download_done.png" />
+    <Resource Include="Resources\favorite.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

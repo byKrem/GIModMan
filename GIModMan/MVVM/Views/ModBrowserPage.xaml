@@ -36,12 +36,30 @@
                             <StackPanel>
                                 <DockPanel>
                                     <Image Source="{Binding PreviewImagePath}" MaxHeight="100">
-                                        <Image.Effect>
-                                            <BlurEffect Radius="{Binding InitialVisibility, Converter={StaticResource ModVisibilityToImageBlurConverter}}"/>
-                                        </Image.Effect>
+                                        <Image.Style>
+                                            <Style TargetType="{x:Type Image}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Effect" Value="{x:Null}"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsMouseOver" Value="False">
+                                                        <Setter Property="Effect">
+                                                            <Setter.Value>
+                                                                <BlurEffect Radius="{Binding InitialVisibility,
+                                                                    Converter={StaticResource ModVisibilityToImageBlurConverter}}"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
                                     </Image>
                                     <StackPanel Margin="5">
-                                        <TextBlock Text="{Binding Name}"/>
+                                        <TextBlock>
+                                            <Run Text="{Binding Name}"/>
+                                            by
+                                            <Run Text="{Binding Submitter.Name}" FontWeight="SemiBold"/>
+                                        </TextBlock>
                                     </StackPanel>
                                 </DockPanel>
                                 <DockPanel LastChildFill="False">
@@ -49,12 +67,12 @@
                                     <Button DockPanel.Dock="Left" Content="WebSite" Margin="5"
                                         Command="{x:Static ApplicationCommands.Open}" CommandParameter="{Binding}"/>
                                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Margin="5">
-                                        <Image/>
-                                        <TextBlock Text="{Binding Donwloads, StringFormat={}Downloads: {0}}"/>
+                                        <Image Source="/Resources/download_done.png" Height="20"/>
+                                        <TextBlock Text="{Binding Donwloads, StringFormat={}: {0}}"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Margin="5">
-                                        <Image/>
-                                        <TextBlock Text="{Binding LikeCount, StringFormat={}Likes: {0}}"/>
+                                        <Image Source="/Resources/favorite.png" Height="20"/>
+                                        <TextBlock Text="{Binding LikeCount, StringFormat={}: {0}}"/>
                                     </StackPanel>
                                 </DockPanel>
                             </StackPanel>
@@ -63,6 +81,18 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </myelement:ContextHolder>
-        <!--TODO: Переключение страниц-->
+        <ListBox  Grid.Row="2" Background="{x:Null}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                  ItemsSource="{Binding PageContorolButtons}" BorderThickness="0" ScrollViewer.CanContentScroll="False">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" Focusable="False"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Button Content="{Binding Content}" Command="{Binding Command}" CommandParameter="{Binding CommandParameter}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </UserControl>

@@ -14,11 +14,10 @@ namespace GIModMan.Services
         private const int GAME_ID = 8552;
         /// <summary>
         /// {0} - PageNumber,
-        /// {1} - ItemsPerPage,
-        /// {2} - SortType (Enum: "default", "new", "updated"),
+        /// {1} - SortType (Enum: "default", "new", "updated"),
         /// </summary>
-        private const string LIST_DATA_PATH = "https://gamebanana.com/apiv11/Game/8552/Subfeed?_nPage={0}&_nPerpage={1}&" +
-            "_sSort={2}&_csvModelExclusions=App,Article,Bug,Blog,Club,Contest,Concept,Event,Game,Idea" +
+        private const string LIST_DATA_PATH = "https://gamebanana.com/apiv11/Game/8552/Subfeed?_nPage={0}&" +
+            "_sSort={1}&_csvModelExclusions=App,Article,Bug,Blog,Club,Contest,Concept,Event,Game,Idea" +
             ",Jam,Model,News,Poll,Project,Question,Review,Request,Script," +
             "Sound,Spray,Studio,Thread,Tool,Tutorial,Wiki,Wip"; // Maybe include Tool model?
         /// <summary>
@@ -56,17 +55,16 @@ namespace GIModMan.Services
             return JsonConvert.DeserializeObject<T>(await @response);
         }
 
-        public async Task<List<T>> GetListAsync<T>(int page)
+        public async Task<RecordsList<T>> GetListAsync<T>(int page)
         {
-            int itemsPerPage = 15;
-            string request = string.Format(LIST_DATA_PATH, page, itemsPerPage, "default");
+            string request = string.Format(LIST_DATA_PATH, page, "default");
 
             HttpClient client = new HttpClient();
             var response = await client.GetStringAsync(request);
 
             RecordsList<T> records = JsonConvert.DeserializeObject<RecordsList<T>>(@response);
 
-            return records.Records;
+            return records;
         }
     }
 }
