@@ -34,9 +34,12 @@
                         <TextBlock Text="GenshinImpactModMan" VerticalAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,5,0" HorizontalAlignment="Right">
-                        <Button Content="—" MinWidth="20" Margin="2" Style="{StaticResource SimpleButton}"/>
+                        <Button Content="—" MinWidth="20" Margin="2" Style="{StaticResource SimpleButton}"
+                                Command="{Binding MinimizeWindowCommand}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
                         <Button Content="X" MinWidth="20" Margin="2" Style="{StaticResource ContrastedButton}"
-                                Command="{Binding ShutdownCommand}"/>
+                                Command="{Binding CloseWindowCommand}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
                     </StackPanel>
                 </Grid>
             </Border>

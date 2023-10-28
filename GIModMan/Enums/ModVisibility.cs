@@ -2,7 +2,7 @@
 {
     public enum ModVisibility
     {
-        hide = 0,
+        hide,
         warn,
         show
     }

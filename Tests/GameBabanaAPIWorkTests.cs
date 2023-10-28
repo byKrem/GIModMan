@@ -1,3 +1,4 @@
+using GIModMan.Enums;
 using Newtonsoft.Json.Linq;
 
 namespace Tests
@@ -15,7 +16,7 @@ namespace Tests
         [Test]
         public async Task GetListNewTest()
         {
-            List<Mod> mods = await APIWork.GetListAsync<Mod>(1,10);
+            var mods = await APIWork.GetListAsync<Mod>(page: 1);
             Assert.That(mods, Is.Not.Null);
         }
 
@@ -33,18 +34,13 @@ namespace Tests
                     Name = "Other\\Misc",
                     IconUrl = new Uri("https://images.gamebanana.com/img/ico/ModCategory/6330aa91775d8.png")
                 },
-                InitialVisibility = false,
+                InitialVisibility = ModVisibility.show,
                 CreationDate = UnixTimeToDateTimeConverter.FromUnixTime(1692865436),
                 ModificationDate = UnixTimeToDateTimeConverter.FromUnixTime(1695785228),
-                Submitter = new JArray
+                Submitter = new Submitter()
                 {
-                    new JArray
-                    {
-                        "NiniTrance",
-                        "Literally just tinkered in notepad lmfao",
-                        2352177,
-                        ""
-                    }
+                    ID = 2352177,
+                    Name = "NiniTrance"
                 },
                 Files = new List<ModFile>()
                 {

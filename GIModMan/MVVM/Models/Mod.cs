@@ -140,7 +140,7 @@ namespace GIModMan.MVVM.Models
         }
 
         [JsonProperty("_nDownloadCount")]
-        public long Donwloads
+        public long Downloads
         {
             get => _downloads;
             set => Set(ref _downloads, value);

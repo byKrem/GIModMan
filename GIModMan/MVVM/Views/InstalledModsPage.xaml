@@ -22,22 +22,11 @@
         <!--TODO: Система фильтров-->
         <TextBlock Text="Никакие моды не установлены..." VerticalAlignment="Center" HorizontalAlignment="Center" 
                    FontSize="20" Foreground="{StaticResource black}" Visibility="Visible" Grid.Row="1"/>
-        <ListView Background="{x:Null}" DataContext="{x:Type model:Mod}" Grid.Row="1"
+        <ListBox Background="{x:Null}" Grid.Row="1" ItemsSource="{Binding InstalledMods}"
+                 Visibility="{Binding IsZeroModsInstalled, Converter={StaticResource BoolToVisibilityConverter}}"
 				  ScrollViewer.CanContentScroll="False" HorizontalContentAlignment="Stretch"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled" d:ItemsSource="{d:SampleData ItemCount=5}">
-            <ListView.Style>
-                <Style TargetType="ListView">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsZeroModsInstalled}" Value="True">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding IsZeroModsInstalled}" Value="False">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ListView.Style>
-            <ListView.ItemTemplate>
+            <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Border Height="100" Padding="5" Background="#F0F0F0"
                         CornerRadius="5" BorderThickness="1" BorderBrush="{StaticResource black}">
@@ -57,7 +46,7 @@
                         </StackPanel>
                     </Border>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </UserControl>

@@ -6,7 +6,7 @@
              xmlns:vmodels="clr-namespace:GIModMan.MVVM.ViewModels"
              xmlns:converters="clr-namespace:GIModMan.Converters"
              xmlns:myelement="clr-namespace:GIModMan.MyUIElements"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.DataContext>
@@ -36,6 +36,10 @@
                             <StackPanel>
                                 <DockPanel>
                                     <Image Source="{Binding PreviewImagePath}" MaxHeight="100">
+                                        <Image.Resources>
+                                            <BlurEffect x:Key="imageBlur" Radius="{Binding InitialVisibility, FallbackValue=0,
+                                            Converter={StaticResource ModVisibilityToImageBlurConverter}}"/>
+                                        </Image.Resources>
                                         <Image.Style>
                                             <Style TargetType="{x:Type Image}">
                                                 <Style.Triggers>
@@ -43,12 +47,7 @@
                                                         <Setter Property="Effect" Value="{x:Null}"/>
                                                     </Trigger>
                                                     <Trigger Property="IsMouseOver" Value="False">
-                                                        <Setter Property="Effect">
-                                                            <Setter.Value>
-                                                                <BlurEffect Radius="{Binding InitialVisibility,
-                                                                    Converter={StaticResource ModVisibilityToImageBlurConverter}}"/>
-                                                            </Setter.Value>
-                                                        </Setter>
+                                                        <Setter Property="Effect" Value="{StaticResource imageBlur}"/>
                                                     </Trigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -68,7 +67,7 @@
                                         Command="{x:Static ApplicationCommands.Open}" CommandParameter="{Binding}"/>
                                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Margin="5">
                                         <Image Source="/Resources/download_done.png" Height="20"/>
-                                        <TextBlock Text="{Binding Donwloads, StringFormat={}: {0}}"/>
+                                        <TextBlock Text="{Binding Downloads, StringFormat={}: {0}}"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Margin="5">
                                         <Image Source="/Resources/favorite.png" Height="20"/>
@@ -81,18 +80,18 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </myelement:ContextHolder>
-        <ListBox  Grid.Row="2" Background="{x:Null}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                  ItemsSource="{Binding PageContorolButtons}" BorderThickness="0" ScrollViewer.CanContentScroll="False">
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal" Focusable="False"/>
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Button Content="{Binding Content}" Command="{Binding Command}" CommandParameter="{Binding CommandParameter}"/>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+            <Button Content="&lt;&lt;" Command="{Binding OpenFirstPage}" Margin="5"/>
+            <Button Content="&lt;" Command="{Binding OpenPrevPage}" Margin="5"/>
+            <Button Content="{Binding CurrentPage}" Margin="5"/>
+            <Button Content="&gt;" Command="{Binding OpenNextPage}" Margin="5"/>
+            <Button Content="&gt;&gt;" Command="{Binding OpenLastPage}" Margin="5"/>
+        </StackPanel>
+        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5">
+            <Run Text="{Binding CurrentPage}"/>
+            -
+            <Run Text="{Binding TotalPagesCount}"/>
+            pages
+        </TextBlock>
     </Grid>
 </UserControl>

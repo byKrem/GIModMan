@@ -3,9 +3,6 @@ using GIModMan.MVVM.Models;
 using GIModMan.MVVM.Models.API;
 using GIModMan.Services;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace GIModMan.MVVM.ViewModels
@@ -14,59 +11,72 @@ namespace GIModMan.MVVM.ViewModels
     {
         private APIService _aPIService;
         private List<Mod> _mods;
+        private int _currentPage = 1;
+        public int CurrentPage
+        {
+            get => _currentPage;
+            set => Set(ref _currentPage, value);
+        }
+        private int _totalPagesCount;
+        public int TotalPagesCount
+        {
+            get => _totalPagesCount;
+            set => Set(ref _totalPagesCount, value);
+        }
         public List<Mod> Mods
         {
             get => _mods;
             set => Set(ref _mods, value);
         }
 
-        private ObservableCollection<Button> _pageControlButtons;
-        public ObservableCollection<Button> PageContorolButtons
+        private readonly RelayCommand _openModProfile = new RelayCommand(execute =>
         {
-            get => _pageControlButtons;
-            set => Set(ref _pageControlButtons, value);
-        }
-
-        private RelayCommand _openModProfile = new RelayCommand(execute =>
-        {
-            if (execute is Mod mod)
-            {
-                System.Diagnostics.Process.Start(mod.ProfileUrl.ToString());
-            }
+            System.Diagnostics.Process.Start((execute as Mod).ProfileUrl.ToString());
         }, canExecute => canExecute is Mod);
         public ICommand OpenModProfile => _openModProfile;
 
-        private RelayCommand _openPage;
+        private readonly RelayCommand _openNextPage;
+        private readonly RelayCommand _openPrevPage;
+        private readonly RelayCommand _openLastPage;
+        private readonly RelayCommand _openFirstPage;
+        public ICommand OpenNextPage => _openNextPage;
+        public ICommand OpenPrevPage => _openPrevPage;
+        public ICommand OpenLastPage => _openLastPage;
+        public ICommand OpenFirstPage => _openFirstPage;
 
         public ModBrowserViewModel() 
         {
             _aPIService = new APIService();
-            PageContorolButtons = new ObservableCollection<Button>();
-            _openPage = new RelayCommand(async execute =>
+
+            _openNextPage = new RelayCommand(execute =>
             {
-                if (execute is int page)
-                {
-                    RecordsList<Mod> response = await _aPIService.GetListAsync<Mod>(page);
-                    Mods = response.Records;
-                }
-            });
-            _ = LoadMods();
+                OpenPage(requiredPage: _currentPage + 1);
+            }, canExecute => _currentPage + 1 <= _totalPagesCount);
+
+            _openPrevPage = new RelayCommand(execute =>
+            {
+                OpenPage(requiredPage: _currentPage - 1);
+            }, canExecute => _currentPage - 1 >= 1);
+
+            _openLastPage = new RelayCommand(execute =>
+            {
+                OpenPage(requiredPage: _totalPagesCount);
+            }, canExecute => _currentPage != _totalPagesCount);
+
+            _openFirstPage = new RelayCommand(execute =>
+            {
+                OpenPage(requiredPage: 1);
+            }, canExecute => _currentPage != 1);
+
+            OpenPage(requiredPage: 1);
         }
-
-        private async Task LoadMods()
+        private async void OpenPage(int requiredPage)
         {
-            RecordsList<Mod> response = await _aPIService.GetListAsync<Mod>(page: 1);
-
+            RecordsList<Mod> response = await _aPIService.GetListAsync<Mod>(requiredPage);
             Mods = response.Records;
-            for(int i = 1; i <= response.Metadata.TotalPages; i++)
-            {
-                PageContorolButtons.Add(new Button()
-                {
-                    Content = i,
-                    Command = _openPage,
-                    CommandParameter = i
-                });
-            }
+
+            TotalPagesCount = response.Metadata.TotalPages;
+            CurrentPage = requiredPage;
         }
     }
 }
